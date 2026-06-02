@@ -53,7 +53,19 @@ export default function AddDataModal({
     setPdfSize(file.size);
 
   };
-
+  const getAuthHeaders = async () => {
+    const user = auth.currentUser;
+  
+    if (!user) {
+      throw new Error("User not authenticated");
+    }
+  
+    const token = await user.getIdToken();
+  
+    return {
+      Authorization: `Bearer ${token}`,
+    };
+  };
   const saveMetadata = async () => {
     if (!fileName) {
       alert("Please select a PDF");
@@ -61,12 +73,14 @@ export default function AddDataModal({
     }
 
     try {
+      const headers = await getAuthHeaders();
       await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/addFile`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            headers
           },
           body: JSON.stringify({
             name: fileName,

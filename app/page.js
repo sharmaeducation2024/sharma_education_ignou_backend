@@ -22,6 +22,19 @@ export default function Home() {
 
   const provider = new GoogleAuthProvider();
 
+  const getAuthHeaders = async () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+
+  const token = await user.getIdToken();
+
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+};
   const login = async () => {
     await signInWithPopup(auth, provider);
   };
@@ -32,8 +45,11 @@ export default function Home() {
 
   const loadFiles = async () => {
     try {
+      const headers = await getAuthHeaders();
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/listFiles`
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/listFiles` , {
+          headers
+        }
       );
 
       const data = await res.json();
@@ -45,10 +61,11 @@ export default function Home() {
 
   const deleteFile = async (collection, docId) => {
   try {
+    const headers = await getAuthHeaders();
     await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/admin/deleteFile?collection=${collection}&id=${docId}`,
       {
-        method: "DELETE"
+        method: "DELETE" , headers
       }
     );
 
