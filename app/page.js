@@ -44,20 +44,29 @@ export default function Home() {
   };
 
   const loadFiles = async () => {
-    try {
-      const headers = await getAuthHeaders();
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/admin/listFiles` , {
-          headers
-        }
-      );
+  try {
+    const headers = await getAuthHeaders();
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/admin/listFiles`;
+    console.log("calling url" + url)
+    const res = await fetch(
+      url,
+      { headers }
+    );
 
-      const data = await res.json();
-      setFiles(data);
-    } catch (e) {
-      console.error(e);
+    const data = await res.json();
+
+    console.log("Status:", res.status);
+    console.log("Response:", data);
+
+    if (!res.ok) {
+      throw new Error(data.error || "Request failed");
     }
-  };
+
+    setFiles(data);
+  } catch (e) {
+    console.error(e);
+  }
+};
 
   const deleteFile = async (collection, docId) => {
   try {
