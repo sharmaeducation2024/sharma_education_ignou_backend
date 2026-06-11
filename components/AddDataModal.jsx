@@ -96,6 +96,7 @@ export default function AddDataModal({
       );
 
       onSuccess();
+      alert("Added successfully..");
       onClose();
 
       // reset
@@ -105,6 +106,7 @@ export default function AddDataModal({
       setType("notes");
       setIsFree(true);
     } catch (e) {
+      alert("Error:" + e.message);
       console.error(e);
     }
   };

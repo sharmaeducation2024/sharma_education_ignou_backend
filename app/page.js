@@ -85,8 +85,10 @@ export default function Home() {
         ...prev,
         [collection]: prev[collection].filter((f) => f.id !== docId),
       }));
+      alert("File deleted successfully...");
     } catch (e) {
       console.error(e);
+      alert("Error :" + e.message);
     }
   };
 
