@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import { auth } from "@/config/firebaseConfig";
 export default function AddDataModal({
   open,
   onClose,
